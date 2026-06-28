@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Threat Intelligence Globe</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        background: radial-gradient(#050526 0%, black 90%) no-repeat;
+      }
+      
+      .title-container {
+        position: absolute;
+        top: 30px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        z-index: 1000;
+        pointer-events: none;
+      }
+      
+      .cyberspace {
+        font-family: 'Orbitron', monospace;
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: black;
+        -webkit-text-stroke-width: 2px;
+        -webkit-text-stroke-color: #f6ff14;
+        text-shadow: 
+          0 0 10px rgba(246, 255, 20, 0.8),
+          0 0 20px rgba(246, 255, 20, 0.5);
+        letter-spacing: 6px;
+        display: inline-block;
+        margin: 0 10px;
+        }
+
+      .status-bar {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        z-index: 1000;
+        pointer-events: none;
+      }
+      
+      .status-card {
+        background: rgba(0, 0, 0, 0);
+        color: #f6ff14;
+        padding: 8px 16px;
+        border-radius: 4px;
+        font-family: 'Orbitron', monospace;
+        font-size: 12px;
+        border-left: 3px solid #f6ff14;
+      }
+      
+      .attack-counter {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+        pointer-events: none;
+      }
+      
+      .counter-card {
+        background: rgba(0, 0, 0, 0);
+        color: #ff4444;
+        padding: 8px 16px;
+        border-radius: 4px;
+        font-family: 'Orbitron', monospace;
+        font-size: 14px;
+        font-weight: bold;
+        border-right: 3px solid #ff4444;
+      }
+      
+      .legend {
+        position: absolute;
+        bottom: 21px;
+        left: 40%;
+        transform: translateX(-50%);
+        color: yellow;
+        z-index: 1000;
+        pointer-events: none;
+        background: rgba(0, 0, 0, 0);
+        padding: 8px 16px;
+        border-radius: 4px;
+        display: flex;
+        gap: 10px;
+        font-family: 'Orbitron', monospace;
+        font-size: 9px;
+      }
+      
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      
+      .legend-color {
+        width: 12px;
+        height: 12px;
+        border-radius: 2px;
+      }
+      
+      .legend-color.red { background: #ff4444; }
+      .legend-color.orange { background: #ff6600; }
+      .legend-color.yellow { background: #ffaa00; }
+      .legend-color.gray { background: yellow; }
+
+      .small-button{
+        background: rgba(0,0,0,0);
+        color: #f6ff14;
+        padding: 8px 20px;
+        margin: 0 10px;
+        text-decoration: none;
+        font-family:'Orbitron', monospace;
+        font-size: 13px;
+        display: inline-block;
+        transition: all 0.2s;
+      }
+
+      .small-button:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+
+    </style>
+  </head>
+  <body>
+
+    <div class="title-container">
+      <div>
+        <span class="cyberspace" data-text="IP">IP</span>
+        <span class="cyberspace" data-text="-">-</span>
+        <span class="cyberspace" data-text="HUB">HUB</span>
+      </div>
+    </div>
+    <!-- Navigation Buttons -->
+<div style="position: absolute; top: 80px; left: 0; right: 0; text-align: center; z-index: 1000;">
+  <a href="index.html" class="small-button">
+    HOME
+  </a>
+  <span style=" color: #f6ff14; font-size: 14px;">|</span>
+  <a href="about.html" class="small-button">
+    ABOUT
+  </a>
+</div>
+
+    <!-- Marker Legend -->
+<div style="position: absolute; top: 150px; left: 20px; z-index: 1000; background: rgba(0,0,0,0); backdrop-filter: blur(1px); border: 1px solid #f6ff14; border-radius: 8px; padding: 12px; font-family:'Orbitron', monospace; font-size: 11px; min-width: 180px;">
+  <div style="color: #f6ff14; font-weight: bold; margin-bottom: 10px; text-align: center;"> BLACKLISTED IP : </div>
+  
+  <!-- Red Marker -->
+  <div style="display: flex; align-items: center; margin-bottom: 8px;">
+    <div style="width: 20px; height: 11px; margin-right: 8px; position: relative;">
+      <div style="position: absolute; width: 8px; height: 8px; background: #ff0000; border-radius: 50%; top: 2px; left: 6px;"></div>
+      <div style="position: absolute; width: 12px; height: 12px; border: 2px solid #ff0000; border-radius: 50%; top: -2px; left: 2.8px; animation: pulse 1s infinite;"></div>
+    </div>
+    <span style="color: #ff6666;">High Threat (90%+ confidence)</span>
+  </div>
+  
+  <!-- Orange Marker -->
+  <div style="display: flex; align-items: center; margin-bottom: 8px;">
+    <div style="width: 20px; height: 11px; margin-right: 8px; position: relative;">
+      <div style="position: absolute; width: 8px; height: 8px; background: #ff6600; border-radius: 50%; top: 2px; left: 6px;"></div>
+      <div style="position: absolute; width: 12px; height: 12px; border: 2px solid #ff6600; border-radius: 50%; top: -2px; left: 2.8px; animation: pulse 1s infinite;"></div>
+    </div>
+    <span style="color: #ffaa66;">Medium Threat (70-89% confidence)</span>
+  </div>
+  
+  <!-- Yellow Marker -->
+  <div style="display: flex; align-items: center; margin-bottom: 8px;">
+    <div style="width: 20px; height: 11px; margin-right: 8px; position: relative;">
+      <div style="position: absolute; width: 8px; height: 8px; background: #ffaa00; border-radius: 50%; top: 2px; left: 6px;"></div>
+      <div style="position: absolute; width: 12px; height: 12px; border: 2px solid #ffaa00; border-radius: 50%; top: -2px; left: 2.8px; animation: pulse 1s infinite;"></div>
+    </div>
+    <span style="color: #ffdd88;">Low Threat (Below 70% confidence)</span>
+  </div>
+  
+  <!-- Cyan Marker (Searched IP) -->
+  <div style="display: flex; align-items: center; margin-bottom: 8px;">
+    <div style="width: 20px; height: 11px; margin-right: 8px; position: relative;">
+      <div style="position: absolute; width: 8px; height: 8px; background: #00ffff; border-radius: 50%; top: 2px; left: 6px;"></div>
+      <div style="position: absolute; width: 12px; height: 12px; border: 2px solid #00ffff; border-radius: 50%; top: -2px; left: 2.8px; animation: pulse 1s infinite;"></div>
+    </div>
+    <span style="color: #88ffff;">Searched IP (Temporary Marker)</span>
+  </div>
+  
+</div>
+
+<style>
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+</style>
+
+    <div class="status-bar">
+      <div class="status-card">
+         NETWORK TRAFFIC HEATMAP :
+      </div>
+    </div>
+    
+
+<div class="ip-search-container" style="
+  position: absolute;
+  bottom: 10px;
+  background: transparent;
+  right: 20px;
+  z-index: 1000;
+  pointer-events: auto;
+  font-family:'Orbitron', monospace;
+">
+  <div style="
+    background: rgba(0, 0, 0, 0);
+    border-radius: 8px;
+    padding: 12px;
+  ">
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <input 
+        type="text" 
+        id="ip-search-input" 
+        placeholder="Enter IP address (e.g., 8.8.8.8)" 
+        style="
+          background: rgba(0, 0, 0, 0.6);
+          border: 1px solid #f6ff14;
+          color: #f6ff14;
+          padding: 8px 12px;
+          border-radius: 4px;
+          font-family: 'Orbitron', monospace;
+          font-size: 12px;
+          width: 250px;
+          outline: none;
+        "
+      >
+      <button 
+        id="ip-search-btn" 
+        style="
+          background: #f6ff14;
+          color: black;
+          border: none;
+          padding: 8px 16px;
+          border-radius: 4px;
+          cursor: pointer;
+          font-weight: bold;
+          font-family: 'Orbitron', monospace;
+          font-size: 12px;
+          transition: all 0.2s;
+        "
+        onmouseover="this.style.background='#ffff88'"
+        onmouseout="this.style.background='#f6ff14'"
+      >
+        Search
+      </button>
+      <button 
+        id="ip-clear-btn" 
+        style="
+          background: #ff4444;
+          color: white;
+          border: none;
+          padding: 8px 16px;
+          border-radius: 4px;
+          cursor: pointer;
+          font-weight: bold;
+          font-family: 'Orbitron', monospace;
+          font-size: 12px;
+          transition: all 0.2s;
+        "
+        onmouseover="this.style.background='#ff6666'"
+        onmouseout="this.style.background='#ff4444'"
+      >
+        Clear
+      </button>
+    </div>
+  </div>
+  
+  <!-- Result Panel -->
+  <div id="ip-search-result" style="
+    margin-top: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(1px);
+    border-radius: 8px;
+    padding: 12px;
+    padding-left: 12px;
+    border: 1px solid #f6ff14;
+    font-family:'Orbitron', monospace;
+    font-size: 12px;
+    display: none;
+    width: 440px;
+    word-wrap: break-word;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  "></div>
+</div>
+    
+    <!-- Legend -->
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-color red"></div>
+        <span>HIGH THREAT (90%+)</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color orange"></div>
+        <span>MEDIUM THREAT (70-89%)</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color yellow"></div>
+        <span>LOW THREAT (<70%)</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color gray"></div>
+        <span>NO DATA</span>
+      </div>
+    </div>
+    
+    <!-- Tooltip -->
+    <div id="globe-tooltip" style="
+      position: absolute; 
+      display: none; 
+      background: rgba(0, 0, 0, 0.9); 
+      color: #f6ff14; 
+      padding: 10px 15px; 
+      border-radius: 4px; 
+      font-family:'Orbitron', monospace; 
+      font-size: 12px;
+      pointer-events: none; 
+      z-index: 1000;
+      border: 1px solid #f6ff14;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 0 20px rgba(246, 255, 20, 0.2);
+    "></div>
+    
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.174.0/build/three.module.js",
+        "jsm/": "https://cdn.jsdelivr.net/npm/three@0.174.0/examples/jsm/",
+        "three-globe": "https://esm.sh/three-globe@2.30.0",
+        "@turf/turf": "https://esm.sh/@turf/turf@6.5.0"
+      }
+    }
+    </script>
+    <script type="module" src="index.js"></script>
+  </body>
+</html>
