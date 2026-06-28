@@ -1,6 +1,6 @@
 # 3D globe visualisation for cyber threat analyisis (IP-HUB)
 
-This repository contains a personal web programming project using ThreeJS and FastAPI.
+This repository contains a cyber threat intelligence web application developed using Three.js and FastAPI.
 
 # Features
 
